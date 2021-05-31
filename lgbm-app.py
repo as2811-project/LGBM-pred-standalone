@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+import math
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import LabelEncoder
@@ -41,7 +42,6 @@ X = robust_scaler.fit_transform(X)
 y = default[target_name]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=123, stratify=y)
 
-# For pay features if the <= 0 then it means it was not delayed
 pay_features = ['pay_0','pay_2','pay_3','pay_4','pay_5','pay_6']
 for p in pay_features:
     default.loc[default[p]<=0, p] = 0
@@ -138,8 +138,12 @@ st.header('Prediction from LightGBM Model')
 prob = clf.predict(data)[0]
 if (prob >= 0.5):
     st.write('Will default')
+    prob=prob*100
+    st.write("The probability of default is : %.2f"%prob, "%")
 else:
     st.write('Will pay')
+    prob=prob*100
+    st.write("The probability of default is : %.2f"%prob, "%")
 
 st.header('''Comparative Study Results''')
 st.write('This is how the algorithms compare:')
